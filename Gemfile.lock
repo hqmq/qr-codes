@@ -3,12 +3,15 @@ GEM
   specs:
     chunky_png (1.2.8)
     jruby-jars (1.7.4)
+    mini_magick (3.5.0)
+      subexec (~> 0.2.1)
     minitest (5.0.1)
     rake (10.0.3)
     rqrcode (0.4.2)
     rqrcode_png (0.1.1)
       chunky_png
       rqrcode
+    subexec (0.2.3)
     zxing (0.3.1)
       jruby-jars
 
@@ -16,6 +19,7 @@ PLATFORMS
   java
 
 DEPENDENCIES
+  mini_magick (~> 3.5)
   minitest (~> 5.0)
   rake (~> 10.0)
   rqrcode_png (~> 0.1)
