@@ -21,24 +21,27 @@ task :gen do
 
   #generate qr code PNG
   code = RQRCode::QRCode.new( "#{company}:custid:#{custid}", :size => 4, :level => :h )
-  png = code.to_img
-  png.resize(400,400).save 'code.png'
+  code = code.to_img.resize(400,400)
 
   #generate/annotate footer
-  img = ChunkyPNG::Image.new(400,100, ChunkyPNG::Color::WHITE)
-  img.save 'bottom.png'
-  img = MiniMagick::Image.open 'bottom.png'
-  img.combine_options do |i|
+  footer = ChunkyPNG::Image.new(400,100, ChunkyPNG::Color::WHITE)
+  footer = MiniMagick::Image.read footer.to_blob
+  footer.combine_options do |i|
     i.pointsize 40
     i.font 'Times-New-Roman-Bold'
     i.draw "text 125,60 '#{custid}'"
   end
-  img.write 'bottom.png'
 
-  img = ChunkyPNG::Image.new(400,500, ChunkyPNG::Color::WHITE)
-  img.save 'complete.png'
-  `composite -compose Src-Over code.png complete.png complete.png`
-  `composite -compose Src-Over -geometry +0+400 bottom.png complete.png complete.png`
-  File.unlink 'code.png'
-  File.unlink 'bottom.png'
+  code = MiniMagick::Image.read code.to_blob
+  complete = ChunkyPNG::Image.new(400,500, ChunkyPNG::Color::WHITE)
+  complete = MiniMagick::Image.read complete.to_blob
+  
+  complete = complete.composite(code, 'png') do |c|
+    c.compose 'Src-Over'
+  end
+  complete = complete.composite(footer, 'png') do |c|
+    c.compose 'Src-Over'
+    c.geometry '+0+400'
+  end
+  complete.write 'complete.png'
 end
