@@ -1,0 +1,14 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    jruby-jars (1.7.4)
+    minitest (5.0.1)
+    zxing (0.3.1)
+      jruby-jars
+
+PLATFORMS
+  java
+
+DEPENDENCIES
+  minitest (~> 5.0)
+  zxing (~> 0.3)
