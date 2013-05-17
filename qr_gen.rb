@@ -11,7 +11,6 @@ class QrGen
     composite_image(comment).write path
   end
 
-  private
   def str
     @str ||= begin
       str = prefix+':'
@@ -20,6 +19,7 @@ class QrGen
     end
   end
 
+  private
   def qr_image
     code = RQRCode::QRCode.new( str, :size => 4, :level => :h )
     code = code.to_img.resize(400,400)

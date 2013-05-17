@@ -24,7 +24,21 @@ task :summit, :flat_file, :output_dir do |t, args|
   require 'csv'
   require_relative 'qr_gen'
   CSV.foreach(args[:flat_file], headers: true, col_sep: "\t") do |row|
+    first = row['first'].strip.downcase
+    last = row['last'].strip.downcase
     gen = QrGen.new('evt', {'custid' => row['customer_id']})
-    gen.write(args[:output_dir] + "/#{row['first']}_#{row['last']}.png", row['customer_id'])
+    filepath = args[:output_dir] + "/#{first}_#{last}.png"
+    puts "#{filepath} -> #{gen.str}"
+    gen.write(filepath, row['customer_id'])
+  end
+end
+
+desc 'decode a qr image'
+task :decode, :dir do |t, args|
+  require 'zxing'
+  puts "decoding..."
+  Dir[args[:dir]+'/*.png'].each do |png|
+    decoded = ZXing.decode png
+    puts "#{png} -> #{decoded}"
   end
 end
